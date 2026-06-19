@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
 
 spring:
   application:
@@ -11,7 +11,7 @@ spring:
 
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/payment_db
+    url: jdbc:postgresql://localhost:5433/payment_db
     username: rodrilang
     password: supersecretpassword
     driver-class-name: org.postgresql.Driver
@@ -30,7 +30,7 @@ spring:
 
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       properties:
-        anti..idempotence: true
+        enable.idempotence: true
     properties:
 
       schema.registry.url: http://localhost:8081
