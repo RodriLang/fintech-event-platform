@@ -33,4 +33,4 @@ spring:
         enable.idempotence: true
     properties:
 
-      schema.registry.url: http://localhost:8081
+      schema.registry.url: http://localhost:8085

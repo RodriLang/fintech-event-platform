@@ -1,4 +1,4 @@
-package com.rodrilang.fintech.payment_service;
+package com.rodrilang.fintech.payment;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

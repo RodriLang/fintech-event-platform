@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "PaymentEvent",
+  "namespace": "com.rodrilang.fintech.avro",
+  "fields": [
+    { "name": "transactionId", "type": "string" },
+    { "name": "customerId", "type": "string" },
+    { "name": "amount", "type": "double" },
+    { "name": "currency", "type": "string", "default": "ARS" },
+    { "name": "status", "type": "string" }
+  ]
+}
