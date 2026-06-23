@@ -5,6 +5,7 @@ import com.rodrilang.fintech.payment.dto.request.PaymentRequest;
 import com.rodrilang.fintech.payment.dto.response.PaymentResponse;
 import com.rodrilang.fintech.payment.mapper.PaymentMapper;
 import com.rodrilang.fintech.payment.model.Payment;
+import com.rodrilang.fintech.payment.model.PaymentStatus;
 import com.rodrilang.fintech.payment.producer.PaymentProducer;
 import com.rodrilang.fintech.payment.repository.PaymentRepository;
 import com.rodrilang.fintech.payment.service.PaymentService;
@@ -31,6 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Payment payment = paymentMapper.toEntity(request);
         payment.setTransactionId(transactionId);
+        payment.setStatus(PaymentStatus.PENDING);
 
         Payment savedPayment = paymentRepository.save(payment);
         PaymentEvent paymentEvent = mapToEvent(payment);
