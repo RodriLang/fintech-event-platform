@@ -1,4 +1,4 @@
-package com.rodrilang.fintech.notification_service;
+package com.rodrilang.fintech.notification;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
