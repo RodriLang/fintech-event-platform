@@ -1,14 +1,18 @@
 #!/bin/bash
 set -e
 
-echo "Iniciando la creación de múltiples bases de datos..."
+if [ -n "$POSTGRES_MULTIPLE_DATABASES" ]; then
+    echo "Iniciando la creación dinámica de múltiples bases de datos..."
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_USER" <<-EOSQL
-    CREATE DATABASE payment_db;
-    CREATE DATABASE fraud_db;
+    # Reemplazamos las comas por espacios para poder iterar en el bucle for
+    for db in $(echo $POSTGRES_MULTIPLE_DATABASES | tr ',' ' '); do
+        echo "Creando base de datos: '$db'"
 
-    GRANT ALL PRIVILEGES ON DATABASE payment_db TO "$POSTGRES_USER";
-    GRANT ALL PRIVILEGES ON DATABASE fraud_db TO "$POSTGRES_USER";
+        psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_USER" <<-EOSQL
+            CREATE DATABASE $db;
+            GRANT ALL PRIVILEGES ON DATABASE $db TO "$POSTGRES_USER";
 EOSQL
+    done
 
-echo "Bases de datos creadas exitosamente."
+    echo "Todas las bases de datos fueron creadas exitosamente."
+fi
