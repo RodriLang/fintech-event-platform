@@ -61,5 +61,11 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./infra/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
 
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: fintech-zkin
+    ports:
+      - "9411:9411"
+
 volumes:
   pgdata:
