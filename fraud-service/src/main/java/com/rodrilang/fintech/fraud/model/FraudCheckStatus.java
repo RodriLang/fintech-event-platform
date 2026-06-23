@@ -1,4 +1,7 @@
-package com.rodrilang.fintech.fraud_service.model;
+package com.rodrilang.fintech.fraud.model;
 
-public class FraudCheckStatus {
+public enum FraudCheckStatus {
+    APPROVED,
+    REJECTED_HIGH_AMOUNT,
+    SUSPICIOUS
 }

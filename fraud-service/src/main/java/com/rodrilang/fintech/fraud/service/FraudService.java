@@ -1,4 +1,9 @@
 package com.rodrilang.fintech.fraud.service;
 
-public class FraudService {
+import com.rodrilang.fintech.avro.PaymentEvent;
+
+public interface FraudService {
+
+     void evaluatePayment(PaymentEvent event);
+
 }
