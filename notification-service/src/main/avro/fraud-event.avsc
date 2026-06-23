@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "FraudEvaluatedEvent",
+  "namespace": "com.rodrilang.fintech.avro",
+  "fields": [
+    {
+      "name": "transactionId",
+      "type": "string"
+    },
+    {
+      "name": "customerId",
+      "type": "string"
+    },
+    {
+      "name": "status",
+      "type": "string"
+    },
+    {
+      "name": "reason",
+      "type": "string"
+    }
+  ]
+}
