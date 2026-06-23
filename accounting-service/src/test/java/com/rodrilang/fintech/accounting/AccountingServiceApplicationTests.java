@@ -1,4 +1,4 @@
-package com.rodrilang.fintech.accounting_service;
+package com.rodrilang.fintech.accounting;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

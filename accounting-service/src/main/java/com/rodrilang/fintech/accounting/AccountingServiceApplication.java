@@ -1,4 +1,4 @@
-package com.rodrilang.fintech.accounting_service;
+package com.rodrilang.fintech.accounting;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
