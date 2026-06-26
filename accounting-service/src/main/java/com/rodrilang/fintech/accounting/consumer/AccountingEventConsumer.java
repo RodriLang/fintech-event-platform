@@ -16,7 +16,7 @@ public class AccountingEventConsumer {
 
     @KafkaListener(topics = "fraud-evaluated-events", groupId = "accounting-service-group")
     public void consumeAccountingEvent(FraudEvaluatedEvent event) {
-        log.info("[CONTABILIDAD] Recibido veredicto para procesar en Ledger. Tx: {}, Estado: {}",
+        log.info("Resolucion recibida para procesar en Ledger. Tx: {}, Estado: {}",
                 event.getTransactionId(), event.getStatus());
 
         accountingService.processLedgerEntry(event);

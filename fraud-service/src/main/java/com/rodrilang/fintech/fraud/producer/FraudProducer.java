@@ -15,15 +15,15 @@ public class FraudProducer {
     private static final String TOPIC = "fraud-evaluated-events";
 
     public void sendFraudResult(FraudEvaluatedEvent event) {
-        log.info("Publicando veredicto de fraude en Kafka. ID Transacción: {}, Resultado: {}",
+        log.info("Publicando resolución de fraude en Kafka. ID Transacción: {}, Resultado: {}",
                 event.getTransactionId(), event.getStatus());
 
         kafkaTemplate.send(TOPIC, event.getTransactionId(), event)
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
-                        log.error("Error al enviar el veredicto a Kafka", ex);
+                        log.error("Error al enviar la resolucion a Kafka", ex);
                     } else {
-                        log.info("Veredicto enviado con éxito. Partition: {}, Offset: {}",
+                        log.info("Resolucion enviado con éxito. Partition: {}, Offset: {}",
                                 result.getRecordMetadata().partition(), result.getRecordMetadata().offset());
                     }
                 });

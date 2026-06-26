@@ -10,10 +10,12 @@ import com.rodrilang.fintech.payment.producer.PaymentProducer;
 import com.rodrilang.fintech.payment.repository.PaymentRepository;
 import com.rodrilang.fintech.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -61,5 +63,22 @@ public class PaymentServiceImpl implements PaymentService {
                 paymentProducer.sendPaymentEvent(event);
             }
         });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PaymentResponse getPaymentById(String transactionId) {
+        return paymentRepository.findById(transactionId)
+                .map(payment ->  new PaymentResponse(
+                        payment.getTransactionId(),
+                        payment.getCustomerId(),
+                        payment.getDestinationAccountId(),
+                        payment.getAmount(),
+                        payment.getCurrency(),
+                        payment.getStatus()))
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Pago no encontrado con ID: " + transactionId
+                ));
     }
 }

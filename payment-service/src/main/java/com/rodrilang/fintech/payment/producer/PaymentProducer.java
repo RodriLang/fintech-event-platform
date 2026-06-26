@@ -20,7 +20,7 @@ public class PaymentProducer {
         log.info("Publicando evento de pago en Kafka. ID: {}, Cliente: {}", event.getTransactionId(), event.getCustomerId());
 
         CompletableFuture<SendResult<String, PaymentEvent>> future =
-                kafkaTemplate.send(TOPIC, event.getCustomerId().toString(), event);
+                kafkaTemplate.send(TOPIC, event.getTransactionId(), event);
 
         future.whenComplete((result, ex) -> {
             if (ex == null) {

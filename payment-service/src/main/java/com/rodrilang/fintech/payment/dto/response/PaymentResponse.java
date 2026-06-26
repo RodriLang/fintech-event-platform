@@ -2,6 +2,8 @@ package com.rodrilang.fintech.payment.dto.response;
 
 import com.rodrilang.fintech.payment.model.PaymentStatus;
 
+import java.math.BigDecimal;
+
 public record PaymentResponse (
 
      String transactionId,
@@ -10,7 +12,7 @@ public record PaymentResponse (
 
      String destinationAccountId,
 
-     Double amount,
+     BigDecimal amount,
 
      String currency,
 

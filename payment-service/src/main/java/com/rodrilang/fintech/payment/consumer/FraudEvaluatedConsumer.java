@@ -19,7 +19,7 @@ public class FraudEvaluatedConsumer {
     @KafkaListener(topics = "fraud-evaluated-events", groupId = "payment-service-group")
     @Transactional
     public void consume(FraudEvaluatedEvent event) {
-        log.info("Veredicto de fraude recibido desde Kafka - ID: {}, Estado: {}",
+        log.info("Resolucion de fraude recibida desde Kafka - ID: {}, Estado: {}",
                 event.getTransactionId(), event.getStatus());
 
         paymentRepository.findById(event.getTransactionId())
@@ -28,7 +28,7 @@ public class FraudEvaluatedConsumer {
                     payment.setStatus(newStatus);
 
                     paymentRepository.save(payment);
-                    log.info("¡Pago transaccionado con éxito! Estado final en DB: {}", newStatus);
+                    log.info("Pago transaccionado con éxito. Estado final en DB: {}", newStatus);
                 }, () -> log.error("Error crítico: No se encontró el pago original con ID: {}", event.getTransactionId()));
     }
 }

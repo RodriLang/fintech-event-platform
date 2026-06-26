@@ -1,4 +1,7 @@
 package com.rodrilang.fintech.notification.model;
 
-public class PaymentStatus {
+public enum PaymentStatus {
+    PENDING,
+    APPROVED,
+    REJECTED
 }

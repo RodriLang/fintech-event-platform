@@ -7,4 +7,6 @@ public interface PaymentService {
 
      PaymentResponse initiatePayment(PaymentRequest request);
 
+     PaymentResponse getPaymentById(String transactionId);
+
 }

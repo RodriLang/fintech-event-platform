@@ -1,4 +1,7 @@
 package com.rodrilang.fintech.notification.service;
 
-public class NotificationService {
+import com.rodrilang.fintech.avro.FraudEvaluatedEvent;
+
+public interface NotificationService {
+    void processAndSendAlert(FraudEvaluatedEvent event);
 }

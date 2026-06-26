@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.rodrilang.fintech.fraud.service.FraudService;
@@ -22,26 +23,37 @@ public class FraudServiceImpl implements FraudService {
 
     private final FraudCheckRepository fraudCheckRepository;
     private final FraudProducer fraudProducer;
-    private static final Double MAX_ALLOWED_AMOUNT = 10000.00;
+
+    private static final BigDecimal SUSPECT_THRESHOLD = new BigDecimal("5000.00");
+    private static final BigDecimal MAX_ALLOWED_AMOUNT = new BigDecimal("10000.00");
 
     @Override
     @Transactional
     public void evaluatePayment(PaymentEvent event) {
         log.info("Analizando riesgo para la transacción: {}", event.getTransactionId());
 
-        FraudCheckStatus status = FraudCheckStatus.APPROVED;
-        String reason = "Monto dentro de los límites seguros.";
+        BigDecimal amount = event.getAmount();
+        FraudCheckStatus status;
+        String reason;
 
-        if (event.getAmount() > MAX_ALLOWED_AMOUNT) {
+        if (amount.compareTo(MAX_ALLOWED_AMOUNT) > 0) {
             status = FraudCheckStatus.REJECTED_HIGH_AMOUNT;
             reason = "El monto supera el límite permitido de " + MAX_ALLOWED_AMOUNT;
             log.warn("ALERTA DE FRAUDE. Transacción {} rechazada. Monto: {}", event.getTransactionId(), event.getAmount());
+
+        } else if (amount.compareTo(SUSPECT_THRESHOLD) > 0) {
+            status = FraudCheckStatus.PENDING_REVIEW;
+            reason = "Monto elevado en zona gris. Requiere monitoreo preventivo.";
+            log.warn("TRANSACCION SOSPECHOSA. Transaccion {} bajo la lupa. Monto: {}", event.getTransactionId(), event.getAmount());
+        } else {
+            status = FraudCheckStatus.APPROVED;
+            reason = "Monto dentro de los límites seguros.";
         }
 
         FraudCheck check = FraudCheck.builder()
                 .transactionId(event.getTransactionId())
                 .customerId(event.getCustomerId())
-                .amount(event.getAmount())
+                .amount(amount)
                 .result(status)
                 .reason(reason)
                 .checkedAt(LocalDateTime.now())
@@ -59,7 +71,5 @@ public class FraudServiceImpl implements FraudService {
                         .build();
 
         fraudProducer.sendFraudResult(evaluatedEvent);
-        // TODO: En el próximo paso, acá deberíamos disparar un evento "FraudEvaluatedEvent"
-        // hacia Kafka para avisarle a payment-service si debe confirmar o cancelar el pago.
     }
 }

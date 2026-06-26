@@ -13,18 +13,20 @@ import org.springframework.util.backoff.FixedBackOff;
 @Slf4j
 public class KafkaConsumerConfig {
 
+    private static final long INTERVAL_ATTEMPTS = 2000L;
+    private static final long MAX_ATTEMPTS = 3L;
+
     @Bean
     public CommonErrorHandler errorHandler(KafkaTemplate<Object, Object> kafkaTemplate) {
         DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate);
 
-        FixedBackOff backOff = new FixedBackOff(2000L, 3L);
+        FixedBackOff backOff = new FixedBackOff(INTERVAL_ATTEMPTS, MAX_ATTEMPTS);
 
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(recoverer, backOff);
 
-        errorHandler.setRetryListeners((consumerRecord, ex, deliveryAttempt) -> {
-            log.warn("Reintento fallido número {} para el mensaje en la partición {}. Error: {}",
-                    deliveryAttempt, consumerRecord.partition(), ex.getMessage());
-        });
+        errorHandler.setRetryListeners((consumerRecord, ex, deliveryAttempt)
+                -> log.warn("Reintento fallido número {} para el mensaje en la partición {}. Error: {}",
+                deliveryAttempt, consumerRecord.partition(), ex.getMessage()));
 
         return errorHandler;
     }

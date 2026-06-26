@@ -23,14 +23,14 @@ public class AccountingServiceImpl implements AccountingService {
     @Transactional
     public void processLedgerEntry(FraudEvaluatedEvent event) {
         if (event == null || event.getTransactionId() == null) {
-            log.error("[CONTABILIDAD] Evento recibido nulo o sin ID de transacción. Ignorando registro.");
+            log.error("Evento recibido nulo o sin ID de transacción. Ignorando registro.");
             return;
         }
 
         String transactionId = event.getTransactionId();
 
         if (ledgerRepository.existsById(transactionId)) {
-            log.warn("[CONTABILIDAD] Mensaje duplicado detectado para Tx: {}. Ignorando asiento contable.", transactionId);
+            log.warn("Mensaje duplicado detectado para Tx: {}. Ignorando asiento contable.", transactionId);
             return;
         }
 
@@ -38,14 +38,14 @@ public class AccountingServiceImpl implements AccountingService {
         try {
             currentStatus = PaymentStatus.valueOf(event.getStatus());
         } catch (IllegalArgumentException | NullPointerException e) {
-            log.error("[CONTABILIDAD] Estado desconocido o nulo recibido: {}. Fallo al mapear enum.", event.getStatus());
+            log.error("Estado desconocido o nulo recibido: {}. Fallo al mapear enum.", event.getStatus());
             return;
         }
 
         if (PaymentStatus.APPROVED.equals(currentStatus)) {
-            log.info("[ASIENTO CONTABLE] Moviendo fondos. Registrando asiento para el Cliente: {}", event.getCustomerId());
+            log.info("Moviendo fondos. Registrando asiento para el Cliente: {}", event.getCustomerId());
         } else {
-            log.warn("[AUDITORÍA FINANCIERA] Asentando registro de anulación para Tx Rechazada: {}", transactionId);
+            log.warn("Asentando registro de anulación para Tx Rechazada: {}", transactionId);
         }
 
         LedgerEntry entry = LedgerEntry.builder()
@@ -56,6 +56,6 @@ public class AccountingServiceImpl implements AccountingService {
                 .build();
 
         ledgerRepository.save(entry);
-        log.info("[LEDGER CONSOLIDADO] Transacción {} guardada con éxito en accounting_db.", transactionId);
+        log.info("Transacción {} guardada con éxito en accounting_db.", transactionId);
     }
 }
