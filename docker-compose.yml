@@ -54,8 +54,8 @@ services:
     ports:
       - "5433:5432"
     environment:
-      POSTGRES_USER: rodrilang
-      POSTGRES_PASSWORD: supersecretpassword
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_MULTIPLE_DATABASES: payment_db,fraud_db,accounting_db
     volumes:
       - pgdata:/var/lib/postgresql/data
