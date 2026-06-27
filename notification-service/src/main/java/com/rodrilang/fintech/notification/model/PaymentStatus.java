@@ -3,5 +3,6 @@ package com.rodrilang.fintech.notification.model;
 public enum PaymentStatus {
     PENDING,
     APPROVED,
-    REJECTED
+    PENDING_REVIEW,
+    REJECTED_HIGH_AMOUNT
 }
