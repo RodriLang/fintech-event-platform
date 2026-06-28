@@ -24,8 +24,8 @@ public class FraudServiceImpl implements FraudService {
     private final FraudCheckRepository fraudCheckRepository;
     private final FraudProducer fraudProducer;
 
-    private static final BigDecimal SUSPECT_THRESHOLD = new BigDecimal("5000.00");
-    private static final BigDecimal MAX_ALLOWED_AMOUNT = new BigDecimal("10000.00");
+    private static final BigDecimal SUSPECT_THRESHOLD = new BigDecimal("50000.00");
+    private static final BigDecimal MAX_ALLOWED_AMOUNT = new BigDecimal("100000.00");
 
     @Override
     @Transactional
